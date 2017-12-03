@@ -1,0 +1,3 @@
+<launch>
+	<node name="CV_algo" pkg="CV_algo" type="grass_classifier.py"/>
+</launch>

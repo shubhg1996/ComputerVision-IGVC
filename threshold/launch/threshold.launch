@@ -1,0 +1,3 @@
+<launch>
+	<node name="threshold" pkg="threshold" type="threshold"/>
+</launch>

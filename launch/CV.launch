@@ -1,0 +1,30 @@
+<launch>
+	<!-- <include file="$(find fireBirdVI)/launch/mapping.launch"/> -->
+	
+	<node name="usb_cam" pkg= "usb_cam" type= "usb_cam_node">
+		<param name= "video_device" type= "string" value= "/dev/video1"/>
+	</node>
+	
+	<node name="camdriver" pkg="camdriver" type="grayscale_node"/>	
+	
+	<node pkg = "tf" type = "static_transform_publisher" name = "laser_base_link" args = "0 0 0 0 0 0 base_link camera 100"/>
+	
+	<node pkg = "tf" type = "static_transform_publisher" name = "base_link_to_camera" args = "0 0 0 0 0 0 camera laser 100" />	
+	
+	<node  name="dataFusion" pkg= "obstacle_remover" type= "dataFusion">
+		<remap from="/image" to="/usb_cam/image_raw"/>
+		<!--<remap from="/obstacle_free_image" to="/image_raw"/>-->	
+	</node>		
+	
+	<node name="top_view_node" pkg="top_view" type="top_view_node">
+		<!--<remap from="/obstacle_free_image" to="/stablised"/>-->
+	</node>
+	<node name="threshold" pkg="threshold" type="threshold"/>
+	
+	<node name="imgtolaserscan" pkg="imgtolaserscan" type="imgtolaserscan" />
+	
+	<node name="tf" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 base_link laser_frame 100"/>
+	<!--
+	<node name="videostab" pkg="videostab" type="videostab_node"/>
+	-->
+</launch>
